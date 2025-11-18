@@ -1,0 +1,2064 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SGPA</title>
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../style.css">
+	<link type="image/png" sizes="96x96" rel="icon" href="../icon-sgpa.png">
+	<script src="../js/jquery.min.js"></script>
+	<script src="../asset/result-js-css/results-front.js"></script>
+	<script src="../asset/result-js-css/tongji.js"></script>
+</head>
+<link rel="stylesheet" href="../asset/result-js-css/results.css">
+<body>
+	<nav class="navbar navbar-expand-lg  bg-primary navbar-dark ">
+		<div class="container">
+			<a class="navbar-brand fs-2 fw-bold" href="../index.html">SGPA</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item">
+						<a class="nav-link" aria-current="page" href="../index.html">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Datasets</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Abrr.</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Help</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Logs</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="../contacts.html">Contacts</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="https://zhanglab.eu.org/">ZhangLab</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<section>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12 ">
+					<form class=" pt-5 mb-5 needs-validation" action="#" novalidate>
+						<div class="row justify-content-center">
+							<div class="col-5">
+								<input type="text" id="search-input" class="form-control" placeholder="typing a gene:"
+									name="geneName" required oninput="this.value=this.value.toUpperCase()">
+							</div>
+							<div class="col-2 ps-2">
+								<button type="submit" class="btn btn-primary" id="search-button"
+									onclick="searchGene(event)">Search</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+	<hr>
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-3 d-none d-md-block">
+					<nav id="navbar-example3" class="navbar navbar-light bg-light flex-column asideNav">
+						<div id="search-result">
+						  /
+						</div>
+						<nav class="nav nav-pills flex-column pt-3 leftBox">
+						  <a class="nav-link border" href="#item-0" target="result">Summary</a>
+						  <a class="nav-link border" href="#item-1" target="result">Gene Expression</a>
+						  <a class="nav-link border" href="#item-2" target="result">Stage-dependent expression</a>
+						  <a class="nav-link border" href="#item-3" target="result">Gene Alteration</a>
+						  <a class="nav-link border" href="#item-4" target="result">Survival</a>
+						  <a class="nav-link border" href="#item-5" target="result">Immune-related</a>
+						  <a class="nav-link border" href="#item-6" target="result">TMB and MSI</a>
+						  <a class="nav-link border" href="#item-7" target="result">Correlation</a>
+						  <a class="nav-link border" href="#item-8" target="result">GSEA </a>
+						</nav>
+					  </nav>
+					  
+				</div>
+				<div class="col-md-9 col-12" id="Result">
+					<div id="template">
+						<div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0"
+							class='scrollspy-example-2'>
+
+
+
+							<div id="item-0">
+								<h4 class="pt-3 pb-3">Summary</h4>
+								<p>Gene: {Genename}</p><!--{Genename}-->
+								<p>Full Name: {fullname}</p><!--fullname-->
+								<p>Alias: {Synonyms}</p><!--Synonyms-->
+								<p>Ensembl ID: {ensemblid}</p><!--{ensemblid} -->
+								<p>Introdcution : {jianjie}</p><!--{jianjie}-->
+								<div>
+									<p>Search this gene in:</p>
+									<a class="btn btn-primary btn-sm" href="http://www.genecards.org/cgi-bin/carddisp.pl?gene={Genename}" role="button">GeneCard</a>
+									<a class="btn btn-primary btn-sm" href="https://www.ncbi.nlm.nih.gov/gene/?term={ensemblid}" role="button">NCBI Gene</a>
+									<a class="btn btn-primary btn-sm" href="https://www.uniprot.org/uniprotkb/{uniprotid}" role="button">UniProt</a>
+									<a class="btn btn-primary btn-sm" href="https://omim.org/entry/{omimid}" role="button">OMIM</a>
+									<a class="btn btn-primary btn-sm" href="http://cancer.sanger.ac.uk/cosmic/gene/analysis?ln={Genename}" role="button">COSMIC</a>
+									<a class="btn btn-primary btn-sm" href="https://www.proteinatlas.org/{ensemblid}-{Genename}/tissue" role="button">HPA</a>
+								</div><!--{Genename} {ensemblid} {uniprotid} {omimid}-->
+							</div>
+
+
+
+							<div id="item-1" class="pt-5">
+								<div class="">
+							 <h4> Pan-cancer gene expression view</h4>
+								</div>
+								<div class="pt-4">
+									<p>TCGA dataset</p>
+								</div>
+								<div class="d-flex justify-content-center">
+										<img src="/asset/gene/ERBB2/gene expression/{Genename}expressionpancancer_Plot.svg" onclick="showImage(this)" data-image="/asset/gene/ERBB2/gene expression/{Genename}expressionpancancer_Plot.svg" alt="wrong" class="img-fluid"/>
+								</div><!--{Genename}--><!--Two places-->
+								<div class="mx-5 px-5 text-center">
+									<p><small>Expression level of {Genename} in TCGA tumors vs. adjacent tissues. *P < 0.05; **P < 0.01; ***P < 0.001，
+										Expression levels are shown as Log2 (TPM+1)</small></p><!--{Genename}-->
+								</div>
+								<div>
+								<table class="table table-bordered">
+									<tbody>
+										<tr>
+											<th scope="row">Significantly upregulate</th>
+											<td>{TCGA_up}</td><!--{TCGA_up}-->
+										</tr>
+										<tr>
+											<th scope="row">Significantly downregulate</th>
+											<td>{TCGA_down}</td><!--{TCGA_down}-->
+										</tr>
+									</tbody>
+								</table>
+								</div>
+								<div class="pt-4">
+									<p>TCGA+GTEx dataset</p>
+								</div>
+								<div class="d-flex justify-content-center">
+										<img src="/asset/gene/ERBB2/gene expression/{Genename}expressionpancancer_Plot.svg" onclick="showImage(this)" data-image="/asset/gene/ERBB2/gene expression/{Genename}expressionpancancer_Plot.svg" alt="wrong" class="img-fluid"/>
+								</div><!--{Genename}--><!--Two places-->
+							
+							 <div class="mx-5 px-5 text-center">
+								<p><small>Box plot representation of {Genename} expression level comparison in cancer relative to the corresponding normal tissues (GTEx database).*P < 0.05; **P < 0.01; ***P < 0.001，Expression levels are shown as Log2 (TPM+1)</small></p><!--{Genename}-->
+							 </div>
+							 <div>
+								<table class="table table-bordered">
+									<tbody>
+										<tr>
+											<th scope="row">Significantly upregulate</th>
+											<td>{TCGA+GTEx_up}</td><!--{TCGA+GTEx_up}-->
+										</tr>
+										<tr>
+											<th scope="row">Significantly downregulate</th>
+											<td>{TCGA+GTEx_down}</td><!--{TCGA+GTEx_down}-->
+										</tr>
+									</tbody>
+								</table>
+								</div>
+                          </div>
+
+
+							<div id="item-2">
+								<div class="pt-5">
+						     <h4> Stage-dependent expression</h4>
+								</div>
+								<nav class="navbar navbar-expand-lg navbar-light bg-light">
+									<div class="container">
+									  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+										<span class="navbar-toggler-icon"></span>
+									  </button>
+									  <div class="collapse navbar-collapse" id="navbarNav">
+										<ul class="navbar-nav row">
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary btn-sm border active" data-bs-toggle="collapse" href="#collapse1" role="button" aria-expanded="false" aria-controls="collapse1" onclick="showActiveImage('image1', this)">ACC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse2" role="button" aria-expanded="false" aria-controls="collapse2" onclick="showActiveImage('image2', this)">BLCA</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse3" role="button" aria-expanded="false" aria-controls="collapse3" onclick="showActiveImage('image3', this)">BRCA</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse4" role="button" aria-expanded="false" aria-controls="collapse4" onclick="showActiveImage('image4', this)">CESC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse5" role="button" aria-expanded="false" aria-controls="collapse5" onclick="showActiveImage('image5', this)">CHOL</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse6" role="button" aria-expanded="false" aria-controls="collapse6" onclick="showActiveImage('image6', this)">COAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse7" role="button" aria-expanded="false" aria-controls="collapse7" onclick="showActiveImage('image7', this)">DLBC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse8" role="button" aria-expanded="false" aria-controls="collapse8" onclick="showActiveImage('image8', this)">ESCA</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse9" role="button" aria-expanded="false" aria-controls="collapse9" onclick="showActiveImage('image9', this)">GBM</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse10" role="button" aria-expanded="false" aria-controls="collapse10" onclick="showActiveImage('image10', this)">HNSC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse11" role="button" aria-expanded="false" aria-controls="collapse11" onclick="showActiveImage('image11', this)">KICH</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse12" role="button" aria-expanded="false" aria-controls="collapse12" onclick="showActiveImage('image12', this)">KIRC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse13" role="button" aria-expanded="false" aria-controls="collapse13" onclick="showActiveImage('image13', this)">KIRP</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse14" role="button" aria-expanded="false" aria-controls="collapse14" onclick="showActiveImage('image14', this)">LGG</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse15" role="button" aria-expanded="false" aria-controls="collapse15" onclick="showActiveImage('image15', this)">LIHC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse16" role="button" aria-expanded="false" aria-controls="collapse16" onclick="showActiveImage('image16', this)">LUAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse17" role="button" aria-expanded="false" aria-controls="collapse17" onclick="showActiveImage('image17', this)">LUSC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse18" role="button" aria-expanded="false" aria-controls="collapse18" onclick="showActiveImage('image18', this)">MESO</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse19" role="button" aria-expanded="false" aria-controls="collapse19" onclick="showActiveImage('image19', this)">OV</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse20" role="button" aria-expanded="false" aria-controls="collapse20" onclick="showActiveImage('image20', this)">PAAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse21" role="button" aria-expanded="false" aria-controls="collapse21" onclick="showActiveImage('image21', this)">PCPG</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse22" role="button" aria-expanded="false" aria-controls="collapse22" onclick="showActiveImage('image22', this)">PRAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse23" role="button" aria-expanded="false" aria-controls="collapse23" onclick="showActiveImage('image23', this)">READ</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse24" role="button" aria-expanded="false" aria-controls="collapse24" onclick="showActiveImage('image24', this)">SARC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse25" role="button" aria-expanded="false" aria-controls="collapse25" onclick="showActiveImage('image25', this)">SKCM</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse26" role="button" aria-expanded="false" aria-controls="collapse26" onclick="showActiveImage('image26', this)">STAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse27" role="button" aria-expanded="false" aria-controls="collapse27" onclick="showActiveImage('image27', this)">TGCT</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse28" role="button" aria-expanded="false" aria-controls="collapse28" onclick="showActiveImage('image28', this)">THCA</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse29" role="button" aria-expanded="false" aria-controls="collaps29" onclick="showActiveImage('image29', this)">UTHYM</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse30" role="button" aria-expanded="false" aria-controls="collapse30" onclick="showActiveImage('image30', this)">UCEC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse31" role="button" aria-expanded="false" aria-controls="collapse31" onclick="showActiveImage('image31', this)">UCS</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse32" role="button" aria-expanded="false" aria-controls="collapse32" onclick="showActiveImage('image32', this)">UVM</a>
+										  </li>
+										</ul>
+									  </div>
+									</div>
+								  </nav>
+								<div class="image-container">
+									<img id="image1" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_ACC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_ACC_stage_{Genename}expression.pdf.svg" alt="wrong" class="active">
+									
+									<img id="image2" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_BLCA_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_BLCA_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image3" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_BRCA_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_BRCA_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image4" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_CESC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_CESC_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image5" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_CHOL_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_CHOL_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image6" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_COAD_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_COAD_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image7" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_DLBC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_DLBC_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image8" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_ESCA_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_ESCA_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image9" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_GBM_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_GBM_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image10" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_HNSC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_HNSC_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image11" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_KICH_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_KICH_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image12" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_KIRC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_KIRC_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image13" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_KIRP_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_KIRP_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image14" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_LGG_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_LGG_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image15" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_LIHC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_LIHC_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image16" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_LUAD_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_LUAD_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image17" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_LUSC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_LUSC_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image18" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_MESO_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_MESO_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image19" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_OV_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_OV_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image20" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_PAAD_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_PAAD_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image21" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_PCPG_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_PCPG_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image22" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_PRAD_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_PRAD_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image23" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_READ_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_READ_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image24" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_SARC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_SARC_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image25" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_SKCM_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_SKCM_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image26" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_STAD_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_STAD_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image27" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_TGCT_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_TGCT_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image28" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_THCA_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_THCA_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image29" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_THYM_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_THYM_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image30" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_UCEC_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_UCEC_stage_{Genename}expression.pdf.svg" alt="wrong">
+									
+									<img id="image31" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_UCS_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_UCS_stage_{Genename}expression.pdf.svg" alt="wrong">
+
+									<img id="image32" src="/asset/gene/ERBB2/Stage-dependent expression/Stage_UVM_stage_{Genename}expression.pdf.svg" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/Stage-dependent expression/Stage_UVM_stage_{Genename}expression.pdf.svg" alt="wrong">
+								</div>
+							</div>
+
+
+
+                            <div id="item-3">
+								<div class="pt-5">
+									<h4>Gene Alteration</h4>
+								</div>
+								<div class="pt-3">
+									<p>You can see this in:</p>
+									<a class="btn btn-primary" href="https://www.cbioportal.org/results/cancerTypesSummary?case_set_id=all&gene_list=ERBB2&cancer_study_list=5c8a7d55e4b046111fee2296" role="button" target="_blank">cBioPortal</a><!--{$Gene}-->
+								</div>
+							</div>
+
+    <!--all done--> <!--all done--> <!--all done-->  <!--all done-->  <!--all done--> <!--all done--> <!--all done--> <!--all done--> <!--all done--> <!--all done-->
+          
+							<div id="item-4">
+								<div class="pt-5">
+							<h4>Survival</h4>
+								</div>
+							<div class="pt-3">
+								<p>
+									<a class="btn btn-primary white-button" data-bs-toggle="collapse" href="#collapse-os" role="button" aria-expanded="false"
+										aria-controls="#collapse-os">
+										Overall Survival
+									</a>
+									<a class="btn btn-primary white-button" data-bs-toggle="collapse" href="#collapse-pfi" role="button" aria-expanded="false"
+										aria-controls="collapse-pfi">
+										Progression Free Interval
+									</a>
+									<a class="btn btn-primary white-button" data-bs-toggle="collapse" href="#collapse-dfi" role="button" aria-expanded="false"
+										aria-controls="collapse-dfi">
+										Disease Free Interval
+									</a>
+									<a class="btn btn-primary white-button" data-bs-toggle="collapse" href="#collapse-dfs" role="button" aria-expanded="false"
+										aria-controls="collapse-dfs">
+										Disease Free Survival
+									</a>
+								</p>
+							</div>
+							<div class="collapse" id="collapse-os">
+							<div class="card card-body">
+								<div class="pt-3">
+									<p>Overview: Higher mRNA expression of {Genename} is a high/low risk in {Cancers}.</p><!--{Genename}-->
+								</div>
+								<div class="d-flex justify-content-center">
+									<table class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th scope="col"></th>
+												<th scope="col">p-value of KM</th>
+												<th scope="col">HR of uni. Cox</th>
+												<th scope="col">p-value of uni. Cox</th>
+												<th scope="col">Risk</th>
+												<th scope="col">KM Image</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<th scope="row">ACC</th>
+												<td>ACC_OS_p_km</td><!--ACC_OS_p_km-->
+												<td>ACC_OS_hr_cox</td><!--ACC_OS_hr_cox-->
+												<td>ACC_OS_p_cox</td><!--ACC_OS_p_cox-->
+												<td class="ACC_OS_risk_coler">ACC_OS_risk</td><!--ACC_OS_risk       Low/High-->    <!--risk_coler    text-success/text-danger-->
+												<td>
+													<a href="#" onclick="showImage(this)" data-image="#">KM</a>
+												</td>
+											</tr>
+											<tr>
+												<th scope="row">BLCA</th>
+												<td>BLCA_OS_p_km</td>
+												<td>BLCA_OS_hr_cox</td>
+												<td>BLCA_OS_p_cox</td>
+												<td class="BLCA_OS_risk_coler">BLCA_OS_risk</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">BRCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>/</td>
+												<td></td>
+											</tr>
+											<tr>
+												<th scope="row">CESC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">CHOL</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">COAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">DLBC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">ESCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">GBM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">HNSC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KICH</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KIRC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KIRP</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LAML</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LGG</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LIHC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LUAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LUSC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">MESO</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">OV</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PAAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PCPG</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PRAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">READ</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">SARC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">SKCM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">STAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">THCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">THYM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UCEC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UCS</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UVM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="pt-3">
+									<h4>Uni.Cox</h4>
+									<iframe src="/asset/gene/ERBB2/survival/os/#" width="100%" height="600px"></iframe>
+								</div>
+							</div>
+							</div>
+							<div class="collapse" id="collapse-pfi">
+							<div class="card card-body">
+								<div class="pt-3">
+									<p>Overview: Higher mRNA expression of {Gene} is a high/low risk in {Cancers}.</p>
+								</div>
+								<div class="d-flex justify-content-center">
+									<table class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th scope="col"></th>
+												<th scope="col">p-value of KM</th>
+												<th scope="col">HR of uni. Cox</th>
+												<th scope="col">p-value of uni. Cox</th>
+												<th scope="col">Risk</th>
+												<th scope="col">Image</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<th scope="row">ACC</th>
+												<td>ACC_OS_p_km</td><!--ACC_OS_p_km-->
+												<td>ACC_OS_hr_cox</td><!--ACC_OS_hr_cox-->
+												<td>ACC_OS_p_cox</td><!--ACC_OS_p_cox-->
+												<td class="ACC_OS_risk_coler">ACC_OS_risk</td><!--ACC_OS_risk       Low/High-->    <!--risk_coler    text-success/text-danger-->
+												<td>
+													<a href="#" onclick="showImage(this)" data-image="/asset/gene/ERBB2/gene expression/ZZZ3expressionpancancer_Plot.svg">KM</a>
+													<a href="/asset/gene/ERBB2/Survival/KM/ZNF416expression_ACC_ImmuneScore_0.000250560128356481.pdf" target="">Uni.Cox</a>
+												</td>
+											</tr>
+											<tr>
+												<th scope="row">BLCA</th>
+												<td>BLCA_OS_p_km</td>
+												<td>BLCA_OS_hr_cox</td>
+												<td>BLCA_OS_p_cox</td>
+												<td class="BLCA_OS_risk_coler">BLCA_OS_risk</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">BRCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">CESC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">CHOL</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">COAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">DLBC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">ESCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">GBM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">HNSC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KICH</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KIRC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KIRP</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LAML</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LGG</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LIHC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LUAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LUSC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">MESO</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">OV</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PAAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PCPG</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PRAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">READ</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">SARC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">SKCM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">STAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">THCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">THYM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UCEC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UCS</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UVM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							</div>
+							<div class="collapse" id="collapse-dfi">
+							<div class="card card-body">
+								<div class="pt-3">
+									<p>Overview: Higher mRNA expression of {Gene} is a high/low risk in {Cancers}.</p>
+								</div>
+								<div class="d-flex justify-content-center">
+									<table class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th scope="col"></th>
+												<th scope="col">p-value of KM</th>
+												<th scope="col">HR of uni. Cox</th>
+												<th scope="col">p-value of uni. Cox</th>
+												<th scope="col">Risk</th>
+												<th scope="col">Image</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<th scope="row">ACC</th>
+												<td>ACC_OS_p_km</td><!--ACC_OS_p_km-->
+												<td>ACC_OS_hr_cox</td><!--ACC_OS_hr_cox-->
+												<td>ACC_OS_p_cox</td><!--ACC_OS_p_cox-->
+												<td class="ACC_OS_risk_coler">ACC_OS_risk</td><!--ACC_OS_risk       Low/High-->    <!--risk_coler    text-success/text-danger-->
+												<td>
+													<a href="#" onclick="showImage(this)" data-image="/asset/gene/ERBB2/gene expression/ZZZ3expressionpancancer_Plot.svg">KM</a>
+													<a href="/asset/gene/ERBB2/Survival/KM/ZNF416expression_ACC_ImmuneScore_0.000250560128356481.pdf" target="">Uni.Cox</a>
+												</td>
+											</tr>
+											<tr>
+												<th scope="row">BLCA</th>
+												<td>BLCA_OS_p_km</td>
+												<td>BLCA_OS_hr_cox</td>
+												<td>BLCA_OS_p_cox</td>
+												<td class="BLCA_OS_risk_coler">BLCA_OS_risk</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">BRCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">CESC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">CHOL</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">COAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">DLBC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">ESCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">GBM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">HNSC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KICH</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KIRC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KIRP</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LAML</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LGG</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LIHC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LUAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LUSC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">MESO</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">OV</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PAAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PCPG</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PRAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">READ</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">SARC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">SKCM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">STAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">THCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">THYM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UCEC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UCS</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UVM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							</div>
+							<div class="collapse" id="collapse-dfs">
+							<div class="card card-body">
+								<div class="pt-3">
+									<p>Overview: Higher mRNA expression of {Gene} is a high/low risk in {Cancers}.</p>
+								</div>
+								<div class="d-flex justify-content-center">
+									<table class="table table-striped table-hover">
+										<thead>
+											<tr>
+												<th scope="col"></th>
+												<th scope="col">p-value of KM</th>
+												<th scope="col">HR of uni. Cox</th>
+												<th scope="col">p-value of uni. Cox</th>
+												<th scope="col">Risk</th>
+												<th scope="col">Image</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<th scope="row">ACC</th>
+												<td>ACC_OS_p_km</td><!--ACC_OS_p_km-->
+												<td>ACC_OS_hr_cox</td><!--ACC_OS_hr_cox-->
+												<td>ACC_OS_p_cox</td><!--ACC_OS_p_cox-->
+												<td class="ACC_OS_risk_coler">ACC_OS_risk</td><!--ACC_OS_risk       Low/High-->    <!--risk_coler    text-success/text-danger-->
+												<td>
+													<a href="#" onclick="showImage(this)" data-image="/asset/gene/ERBB2/gene expression/ZZZ3expressionpancancer_Plot.svg">KM</a>
+													<a href="/asset/gene/ERBB2/Survival/KM/ZNF416expression_ACC_ImmuneScore_0.000250560128356481.pdf" target="">Uni.Cox</a>
+												</td>
+											</tr>
+											<tr>
+												<th scope="row">BLCA</th>
+												<td>BLCA_OS_p_km</td>
+												<td>BLCA_OS_hr_cox</td>
+												<td>BLCA_OS_p_cox</td>
+												<td class="BLCA_OS_risk_coler">BLCA_OS_risk</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">BRCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">CESC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">CHOL</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">COAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">DLBC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">ESCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">GBM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">HNSC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KICH</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KIRC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">KIRP</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LAML</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LGG</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LIHC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LUAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">LUSC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">MESO</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">OV</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PAAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PCPG</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">PRAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">READ</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">SARC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">SKCM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">STAD</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">THCA</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">THYM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UCEC</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UCS</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+											<tr>
+												<th scope="row">UVM</th>
+												<td>#</td>
+												<td>#</td>
+												<td>#</td>
+												<td>High</td>
+												<td>#</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							</div>
+							</div>
+	                        <!--table-->
+	
+							
+							<div id="item-5">
+								<div class="pt-5">
+							<h4>Immune Cells Infiltration Analyses</h4>
+								</div>
+								<div class="pt-4">
+									<p>Correlation between gene expression level and immune cell infiltration</p>
+								</div>
+								<div class="d-flex justify-content-center">
+										<table class="table table-striped table-hover table-bordered">
+											<thead>
+												<tr>
+													<th scope="col">CancerType</th>
+													<th scope="col" >StromalScore</th>
+													<th scope="col" >ImmuneScore</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<th scope="row">ACC</th>
+													<td ><a href="#">ACC_OS_p_km</a></td><!--ACC_OS_p_km-->
+													<td ><a href="#">ACC_OS_p_km</a></td><!--ACC_OS_hr_cox-->
+												</tr>
+												<tr>
+													<th scope="row">BLCA</th>
+													<td><a href="#">ACC_OS_p_km</a></td>
+													<td><a href="#">ACC_OS_p_km</a></td>
+													
+												</tr>
+												<tr>
+													<th scope="row">BRCA</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">CESC</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">CHOL</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">COAD</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">DLBC</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">ESCA</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">GBM</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">HNSC</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">KICH</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">KIRC</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">KIRP</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">LAML</th>
+													<td>#</td>
+													<td>#</td>
+												
+												</tr>
+												<tr>
+													<th scope="row">LGG</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">LIHC</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">LUAD</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">LUSC</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">MESO</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">OV</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">PAAD</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">PCPG</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">PRAD</th>
+													<td>#</td>
+													<td>#</td>
+												
+												</tr>
+												<tr>
+													<th scope="row">READ</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">SARC</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">SKCM</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">STAD</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">THCA</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">THYM</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">UCEC</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">UCS</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+												<tr>
+													<th scope="row">UVM</th>
+													<td>#</td>
+													<td>#</td>
+													
+												</tr>
+											</tbody>
+										</table>
+								</div>
+							</div>
+                           <!--table-->
+
+
+							<div id="item-6">
+								<div class="pt-5">
+									<h4>Tumor Mutation Burden (TMB) and Microsatellite Instability(MSI)</h4>
+								</div>
+								<div class="pt-4">
+									<p>Tumor Mutation Burden</p>
+								</div>
+								<div class="d-flex justify-content-center">
+									<img src="../asset/gene/ERBB2/TMB&MSI/{Genename}expression_radar.pdf" onclick="showImage(this)" data-image="../asset/gene/ERBB2/TMB&MSI/{Genename}expression_radar.pdf" alt="wrong" class="img-fluid" />
+								</div>
+								<div class="mx-5 px-5 text-center">
+									<p><small>Correlation of {Genename} expression with tumor mutation burden (TMB) in multiple cancerin .Spearman’s
+											correlation coefficients are shown above the bar graphs. (Spearman Correlation test, p< 0.05 was
+												considered significant, *p<0.05, **p<0.01, ***p<0.001.).</small>
+									</p>
+								</div>
+								<div class="pt-4">
+									<p>Microsatellite Instability</p>
+								</div>
+								<div class="d-flex justify-content-center">
+									<img src="../asset/gene/ERBB2/TMB&MSI/{Genename}expression_MSI_radar.pdf" onclick="showImage(this)" data-image="../asset/gene/ERBB2/TMB&MSI/{Genename}expression_MSI_radar.pdf" alt="wrong" class="img-fluid" />
+								</div>
+								<div class="mx-5 px-5 text-center">
+									<p><small>Correlation of {Genename} expression with microsatellite instability (MSI) in multiple cancerin .Spearman’s
+											correlation coefficients are shown above the bar graphs. (Spearman Correlation test, p< 0.05 was
+												considered significant, *p<0.05, **p<0.01, ***p<0.001.).</small>
+									</p>
+								</div>
+							</div>
+                            <!--already done-->
+
+
+						<div id="item-7">
+							<div class="pt-5">
+								<h4>
+									Correlation
+								</h4>
+							</div>
+							<div class="d-flex justify-content-center">
+								<img src="/asset/gene/ERBB2/Correlation/" onclick="showImage(this)" data-image="/asset/gene/ERBB2/Correlation/" alt="wrong" class="img-fluid" />
+							</div>
+							<div class="mx-5 px-5 text-center">
+								<p><small>Correlation analyses of the {Genename} expression with immune genes in pan-cancer. ∗p <0:05, ∗∗p <0:01, ∗∗∗p
+											<0:001, and ∗∗∗∗p <0:0001. </small>
+								</p>
+							</div>
+						</div>
+                        <!--filename missing -->
+
+
+
+						<div id="item-8">
+							<div class="pt-5">
+								<h4>
+									GSEA
+								</h4>
+							</div>
+							<nav class="navbar navbar-expand-lg navbar-light bg-light">
+									<div class="container">
+									  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+										<span class="navbar-toggler-icon"></span>
+									  </button>
+									  <div class="collapse navbar-collapse" id="navbarNav">
+										<ul class="navbar-nav row">
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary btn-sm border active" data-bs-toggle="collapse" href="#collapse-1" role="button" aria-expanded="false" aria-controls="collapse-1" onclick="showActiveImage('image-1', this)">ACC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-2" role="button" aria-expanded="false" aria-controls="collapse-2" onclick="showActiveImage('image-2', this)">BLCA</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-3" role="button" aria-expanded="false" aria-controls="collapse-3" onclick="showActiveImage('image-3', this)">BRCA</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-4" role="button" aria-expanded="false" aria-controls="collapse-4" onclick="showActiveImage('image-4', this)">CESC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-5" role="button" aria-expanded="false" aria-controls="collapse-5" onclick="showActiveImage('image-5', this)">CHOL</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-6" role="button" aria-expanded="false" aria-controls="collapse-6" onclick="showActiveImage('image-6', this)">COAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-7" role="button" aria-expanded="false" aria-controls="collapse-7" onclick="showActiveImage('image-7', this)">DLBC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-8" role="button" aria-expanded="false" aria-controls="collapse-8" onclick="showActiveImage('image-8', this)">ESCA</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-9" role="button" aria-expanded="false" aria-controls="collapse-9" onclick="showActiveImage('image-9', this)">GBM</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-10" role="button" aria-expanded="false" aria-controls="collapse-10" onclick="showActiveImage('image-10', this)">HNSC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-11" role="button" aria-expanded="false" aria-controls="collapse-11" onclick="showActiveImage('image-11', this)">KICH</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-12" role="button" aria-expanded="false" aria-controls="collapse-12" onclick="showActiveImage('image-12', this)">KIRC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-13" role="button" aria-expanded="false" aria-controls="collapse-13" onclick="showActiveImage('image-13', this)">KIRP</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-14" role="button" aria-expanded="false" aria-controls="collapse-14" onclick="showActiveImage('image-14', this)">LGG</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-15" role="button" aria-expanded="false" aria-controls="collapse-15" onclick="showActiveImage('image-15', this)">LIHC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-16" role="button" aria-expanded="false" aria-controls="collapse-16" onclick="showActiveImage('image-16', this)">LUAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-17" role="button" aria-expanded="false" aria-controls="collapse-17" onclick="showActiveImage('image-17', this)">LUSC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-18" role="button" aria-expanded="false" aria-controls="collapse-18" onclick="showActiveImage('image-18', this)">MESO</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-19" role="button" aria-expanded="false" aria-controls="collapse-19" onclick="showActiveImage('image-19', this)">OV</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-20" role="button" aria-expanded="false" aria-controls="collapse-20" onclick="showActiveImage('image-20', this)">PAAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-21" role="button" aria-expanded="false" aria-controls="collapse-21" onclick="showActiveImage('image-21', this)">PCPG</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-22" role="button" aria-expanded="false" aria-controls="collapse-22" onclick="showActiveImage('image-22', this)">PRAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-23" role="button" aria-expanded="false" aria-controls="collapse-23" onclick="showActiveImage('image-23', this)">READ</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-24" role="button" aria-expanded="false" aria-controls="collapse-24" onclick="showActiveImage('image-24', this)">SARC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-25" role="button" aria-expanded="false" aria-controls="collapse-25" onclick="showActiveImage('image-25', this)">SKCM</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-26" role="button" aria-expanded="false" aria-controls="collapse-26" onclick="showActiveImage('image-26', this)">STAD</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-27" role="button" aria-expanded="false" aria-controls="collapse-27" onclick="showActiveImage('image-27', this)">TGCT</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-28" role="button" aria-expanded="false" aria-controls="collapse-28" onclick="showActiveImage('image-28', this)">THCA</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-29" role="button" aria-expanded="false" aria-controls="collaps-29" onclick="showActiveImage('image-29', this)">UCEC</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-30" role="button" aria-expanded="false" aria-controls="collapse-30" onclick="showActiveImage('image-30', this)">UCS</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-31" role="button" aria-expanded="false" aria-controls="collapse-31" onclick="showActiveImage('image-31', this)">UVM</a>
+										  </li>
+										  <li class="nav-item col-1">
+											<a class="nav-link btn btn-outline-primary border btn-sm" data-bs-toggle="collapse" href="#collapse-32" role="button" aria-expanded="false" aria-controls="collapse-32" onclick="showActiveImage('image-32', this)">UVM</a>
+										  </li>
+										</ul>
+									  </div>
+									</div>
+								  </nav>
+								  <div class="image-container">
+									<img id="image-1" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_ACC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_ACC.pdf" alt="wrong" class="active">
+									
+									<img id="image-2" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_BLCA.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_BLCA.pdf" alt="wrong">
+
+									<img id="image-3" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_BRCA.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_BRCA.pdf" alt="wrong">
+
+									<img id="image-4" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_CESC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_CESC.pdf" alt="wrong">
+
+									<img id="image-5" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_CHOL.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_CHOL.pdf" alt="wrong">
+
+									<img id="image-6" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_COAD.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_COAD.pdf" alt="wrong">
+
+									<img id="image-7" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_DLBC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_DLBC.pdf" alt="wrong">
+
+									<img id="image-8" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_ESCA.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_ESCA.pdf" alt="wrong">
+
+									<img id="image-9" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_GBM.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_GBM.pdf" alt="wrong">
+
+									<img id="image-10" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_HNSC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_HNSC.pdf" alt="wrong">
+
+									<img id="image-11" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_KICH.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_KICH.pdf" alt="wrong">
+
+									<img id="image-12" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_KIRC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_KIRC.pdf" alt="wrong">
+
+									<img id="image-13" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_KIRP.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_KIRP.pdf" alt="wrong">
+
+									<img id="image-14" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_LGG.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_LGG.pdf" alt="wrong">
+									
+									<img id="image-15" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_LIHC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_LIHC.pdf" alt="wrong">
+
+									<img id="image-16" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_LUAD.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_LUAD.pdf" alt="wrong">
+
+									<img id="image-17" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_LUSC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_LUSC.pdf" alt="wrong">
+
+									<img id="image-18" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_MESO.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_MESO.pdf" alt="wrong">
+
+									<img id="image-19" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_OV.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_OV.pdf" alt="wrong">
+
+									<img id="image-20" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_PAAD.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_PAAD.pdf" alt="wrong">
+									
+									<img id="image-21" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_PCPG.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_PCPG.pdf" alt="wrong">
+									
+									<img id="image-22" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_PRAD.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_PRAD.pdf" alt="wrong">
+									
+									<img id="image-23" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_READ.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_READ.pdf" alt="wrong">
+									
+									<img id="image-24" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_SARC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_SARC.pdf" alt="wrong">
+									
+									<img id="image-25" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_SKCM.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_SKCM.pdf" alt="wrong">
+									
+									<img id="image-26" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_STAD.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_STAD.pdf" alt="wrong">
+									
+									<img id="image-27" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_TGCT.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_TGCT.pdf" alt="wrong">
+									
+									<img id="image-28" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_THCA.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_THCA.pdf" alt="wrong">
+									
+									<img id="image-29" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_THYM.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_THYM.pdf" alt="wrong">
+									
+									<img id="image-30" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_UCEC.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_UCEC.pdf" alt="wrong">
+									
+									<img id="image-31" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_UCS.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_UCS.pdf" alt="wrong">
+									
+									<img id="image-32" src="/asset/gene/ERBB2/GSEA/Term.{Genename}_UVM.pdf" onclick="showImage(this)"
+									data-image="/asset/gene/ERBB2/GSEA/Term.{Genename}_UVM.pdf" alt="wrong">
+								</div>
+						</div>
+						<!--already done-->
+
+
+						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<footer class="p-5 mt-5 text-center ">
+		<div class="container ">
+			<p class="FooterText">Please Cite Us:J Z Chen,P Y Zhang,L Ma and H Y Zhang,SPGA:an integrative and
+				comprehensive pan-cancer analysis results database of single genes in human tumors(2023),To be
+				Piblished.<br>
+				Copyright©2023 ZhangLab at University of Science and Technology Beijing.All rights reserved.</p>
+		</div>
+	</footer>
+	<section>
+	<div id="imagePopup" onclick="hideImage()">
+		<img id="popupImage" src="" alt="Popup Image">
+	</div>
+    </section>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../asset/result-js-css/results-end.js"></script>
+</body>
+
+</html>

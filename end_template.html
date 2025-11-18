@@ -1,0 +1,37 @@
+print               <tr>
+print                   <th scope="row"></th><!--cancer type-->
+print                        <td></td><!--p-value of KM-->
+print                        <td></td><!--HR of uni. Cox-->
+print                        <td></td><!--p-value of uni. Cox-->
+
+
+if (p-value of uni. Cox < 0.05 && HR of uni. Cox > 1) = High,print    <td class="text-danger">High</td>
+print                        <td>
+print                           <a href="/asset/gene/ERBB2/survival/os/{Gene}expressionTime_{cancer type}_sur_os.pdf" onclick="showImage(this)" data-image="/asset/gene/ERBB2/Survival/OS/{Gene}expressionTime_{cancer type}_sur_os.pdf">KM</a>
+print                       </td>
+print               </tr>
+
+
+if (p-value of uni. Cox < 0.05 && HR of uni. Cox < 1) = Low,print     <td class="text-success">Low</td>
+print                        <td>
+print                           <a href="/asset/gene/ERBB2/survival/os/{Gene}expressionTime_{cancer type}_sur_os.pdf" onclick="showImage(this)" data-image="/asset/gene/ERBB2/Survival/OS/{Gene}expressionTime_{cancer type}_sur_os.pdf">KM</a>
+print                       </td>
+print               </tr>
+
+
+
+if (p-value of uni. Cox > 0.05 ) = /,print                          <td>/</td>
+print                        <td></td>                 
+print                          </tr>
+
+<!--eg:-->
+<tr>
+    <th scope="row">ACC</th>
+    <td>1.00000000</td>
+    <td>1.00000000</td>
+    <td>1.00000000</td>
+    <td class="text-danger/text-success">High/Low</td>
+    <td>
+        <a href="/asset/gene/ERBB2/Survival/OS/ABCC8expressionTime_LUSC_0.98527855774588_sur_os.pdf" onclick="showImage(this)" data-image="/asset/gene/ERBB2/Survival/OS/ABCC8expressionTime_LUSC_0.98527855774588_sur_os.pdf">KM</a>
+    </td>
+</tr>
